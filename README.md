@@ -9,6 +9,11 @@ This Rails 8.1 demo app is a modern, real-time task manager that demonstrates:
 - **Multiple database setup** (primary, queue, cache, cable)
 - **Tailwind CSS** for a clean, responsive interface
 
+
+<img width="913" height="414" alt="Screenshot 2025-11-04 at 22 43 19" src="https://github.com/user-attachments/assets/b3c3265a-4c9f-4f90-a99e-9f8862c5e69f" />
+
+<img width="927" height="839" alt="Screenshot 2025-11-04 at 22 45 44" src="https://github.com/user-attachments/assets/3f4f57ee-98c1-4ed7-93fc-39e66ad12a17" />
+
 ## Features
 
 - Add tasks with a form
