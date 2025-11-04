@@ -18,7 +18,6 @@ This Rails 8.1 demo app is a modern, real-time task manager that demonstrates:
 
 - Add tasks with a form
 - See tasks update live as jobs complete (status changes from `pending` to `done` automatically)
-- Pagination for large task lists
 - Error handling and user-friendly feedback
 - Real background job processing with Solid Queue
 
@@ -83,7 +82,6 @@ This runs Rails, asset builder, and the Solid Queue worker together.
 - If you see status not updating live, check that `config/cable.yml` uses `solid_cable` in development
 - Make sure both the Rails server and the Solid Queue worker are running (via `bin/dev`)
 - If assets don't load, run `yarn install`
-- For database errors, check PostgreSQL is running and your config is correct
 - For any errors, check the terminal output for helpful messages
 
 ## Customization

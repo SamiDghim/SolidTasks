@@ -19,7 +19,7 @@ class TaskJobTest < ActiveJob::TestCase
   end
 
   test "should queue the job" do
-    assert_enqueued_with(job: TaskJob, args: [1]) do
+    assert_enqueued_with(job: TaskJob, args: [ 1 ]) do
       TaskJob.perform_later(1)
     end
   end

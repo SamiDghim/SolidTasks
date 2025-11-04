@@ -6,9 +6,7 @@ class Task < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
   scope :by_status, ->(status) { where(status: status) if status.present? }
 
-  # Broadcast changes to the "tasks" stream
   broadcasts_to ->(task) { "tasks" }
 
   after_create_commit { TaskJob.perform_later(id) }
-  # after_update_commit { broadcast_replace_to "tasks" }
 end
