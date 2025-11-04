@@ -1,17 +1,7 @@
-<% if task.errors.any? %>
-  <div id="task-error-alert" class="mb-4 p-3 bg-red-100 text-red-700 rounded relative">
-    <button type="button" aria-label="Close" onclick="this.parentElement.style.display='none'" class="absolute top-2 right-3 text-xl leading-none">&times;</button>
-    <ul class="mb-0">
-      <% task.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
 <%= form_with model: task, url: tasks_path, method: :post, id: "new_task_form" do |form| %>
   <div class="flex gap-2 items-end">
     <div class="flex-1">
-      <%= form.text_field :name, placeholder: "Enter a task...", autofocus: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg py-3 px-4" %>
+      <%= form.text_field :name, placeholder: "Enter a task...", required: true, autofocus: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg py-3 px-4" %>
     </div>
   <%= form.submit "Create & Enqueue", class: "ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-semibold cursor-pointer" %>
   </div>

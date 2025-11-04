@@ -1,84 +1,92 @@
-
 # Solid Queue Rails 8 Demo
 
-This is a beginner-friendly demo Rails 8.1 application using [Solid Queue](https://github.com/rails/solid_queue) for background job processing.
+## Overview
+
+This Rails 8.1 demo app is a modern, real-time task manager that demonstrates:
+
+- **Background job processing** with [Solid Queue](https://github.com/rails/solid_queue)
+- **Live UI updates** using Turbo Streams (no page refresh needed)
+- **Multiple database setup** (primary, queue, cache, cable)
+- **Tailwind CSS** for a clean, responsive interface
 
 ## Features
 
-- Simple `Task` model with a name and status
-- Homepage form to create tasks and enqueue jobs
-- Background job (`TaskJob`) updates the task status after a short delay
-- Modern UI with Tailwind CSS
+- Add tasks with a form
+- See tasks update live as jobs complete (status changes from `pending` to `done` automatically)
+- Pagination for large task lists
+- Error handling and user-friendly feedback
+- Real background job processing with Solid Queue
 
----
+## How it Works
 
-## Getting Started
+1. **Create a task:** Submitting the form creates a new task with status `pending`.
+2. **Job enqueued:** An ActiveJob (`TaskJob`) is enqueued via Solid Queue.
+3. **Job processing:** The Solid Queue worker picks up the job, waits 2 seconds, and updates the task status to `done`.
+4. **Live update:** Turbo Streams broadcasts the change, and the UI updates the task status in real time—no refresh needed.
 
-### 1. Prerequisites
+## Setup Instructions
 
-- Ruby 3.3+ (check with `ruby -v`)
+### Prerequisites
+
+- Ruby 3.3+
 - PostgreSQL (or update `config/database.yml` for your DB)
 - Node.js & Yarn (for JS/CSS assets)
 
-### 2. Install dependencies
+### Install dependencies
 
-```
+```sh
 bundle install
 yarn install
 ```
 
-### 3. Set up the database
+### Set up the database
 
-```
+```sh
 bin/rails db:setup
-```
-If you already ran migrations, you can use:
-```
+# or, if already migrated:
 bin/rails db:migrate
 ```
 
-### 4. Start the development server
+### Start the app (all processes)
 
-```
+```sh
 bin/dev
 ```
-This runs Rails, asset builder, and job processor together.
 
-### 5. Try the Solid Queue demo
+This runs Rails, asset builder, and the Solid Queue worker together.
 
-1. Open [http://localhost:3000](http://localhost:3000) in your browser.
-2. Use the form to add a new task (enter a name and submit).
-3. The new task appears in the list with status `pending`.
-4. After a few seconds, the background job runs and updates the status to `done`.
-5. Refresh the page to see the updated status.
+### Try it out
 
----
+1. Open [http://localhost:3000](http://localhost:3000)
+2. Add a new task
+3. The task appears as `pending`, then updates to `done` after a few seconds—**without refreshing**
 
-## How it works (for beginners)
+## Real-Time Updates: How Turbo Streams Work
 
-1. **You submit a task** using the form. This creates a new record in the database with status `pending`.
-2. **A background job is enqueued** using Solid Queue. This means the work will be done in the background, not immediately.
-3. **Solid Queue picks up the job** and runs the `TaskJob` class, which waits 2 seconds and then updates the task status to `done`.
-4. **You see the result** by refreshing the page: the status changes from `pending` to `done`.
+- The view subscribes to Turbo Streams: `<%= turbo_stream_from "tasks" %>`
+- The `Task` model uses `broadcasts_to ->(task) { "tasks" }` for automatic broadcasting
+- When a task is updated, Turbo Streams sends a `replace` action to the browser, updating the row in place
 
----
+## Solid Queue & Multiple Databases
 
-## Customization
-
-- You can change the job logic in `app/jobs/task_job.rb`.
-- You can style the UI further in `app/views/tasks/index.html.erb`.
-
----
+- `config/database.yml` is set up for primary, queue, cache, and cable databases
+- `config/queue.yml` and `config/cable.yml` are configured for Solid Queue and Solid Cable
+- In development, **do not use the async cable adapter**—use `solid_cable` so background jobs can broadcast to the browser
 
 ## Troubleshooting
 
-- If you get a database error, check that PostgreSQL is running and your `config/database.yml` is correct.
-- If assets don't load, make sure you ran `yarn install` and are using `bin/dev`.
-- For any errors, check the terminal output for helpful messages.
+- If you see status not updating live, check that `config/cable.yml` uses `solid_cable` in development
+- Make sure both the Rails server and the Solid Queue worker are running (via `bin/dev`)
+- If assets don't load, run `yarn install`
+- For database errors, check PostgreSQL is running and your config is correct
+- For any errors, check the terminal output for helpful messages
 
----
+## Customization
 
-## More resources
+- Change job logic in `app/jobs/task_job.rb`
+- Style the UI in `app/views/tasks/index.html.erb` and Tailwind CSS files
+
+## Resources
 
 - [Solid Queue documentation](https://github.com/rails/solid_queue)
 - [Rails Getting Started Guide](https://guides.rubyonrails.org/getting_started.html)

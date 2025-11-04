@@ -14,10 +14,6 @@ class TasksController < ApplicationController
         format.turbo_stream
         format.html { redirect_to tasks_path, notice: "Task created and job enqueued!" }
       end
-    else
-      @tasks = Task.order(created_at: :desc)
-      flash.now[:alert] = @task.errors.full_messages.join(", ")
-      render :index, status: :unprocessable_entity
     end
   end
 
