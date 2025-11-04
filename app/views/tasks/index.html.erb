@@ -1,0 +1,49 @@
+<div class="min-h-screen bg-gray-50 py-10">
+  <div class="max-w-xl mx-auto bg-white rounded-xl shadow-md p-8 mb-8">
+    <h1 class="text-2xl font-bold mb-4 text-gray-800">Solid Queue Task Demo</h1>
+    <% if flash[:alert] %>
+      <div class="mb-4 p-3 bg-red-100 text-red-700 rounded"> <%= flash[:alert] %> </div>
+    <% end %>
+    <%= form_with url: tasks_path, method: :post, local: true do |form| %>
+      <div class="flex gap-2 items-end">
+        <div class="flex-1">
+          <%= form.text_field :name, placeholder: "Enter a task...", autofocus: true, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-lg py-3 px-4" %>
+        </div>
+        <%= form.submit "Create & Enqueue", class: "ml-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-semibold" %>
+      </div>
+    <% end %>
+  </div>
+  <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md p-8">
+    <h2 class="text-xl font-semibold mb-4 text-gray-700">Tasks</h2>
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created At</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated At</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100">
+        <% @tasks.each do |task| %>
+          <tr class="hover:bg-indigo-50 transition">
+            <td class="px-4 py-2 font-medium text-gray-800"><%= task.name %></td>
+            <td class="px-4 py-2">
+              <% status_color = case task.status
+                when "done" then "bg-green-100 text-green-800"
+                when "pending" then "bg-yellow-100 text-yellow-800"
+                else "bg-gray-100 text-gray-600"
+              end %>
+              <span class="inline-block px-2 py-1 rounded text-xs font-semibold <%= status_color %>"><%= task.status.capitalize %></span>
+            </td>
+            <td class="px-4 py-2 text-gray-500"><%= task.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+            <td class="px-4 py-2 text-gray-500"><%= task.updated_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @tasks.empty? %>
+      <div class="text-center text-gray-400 mt-6">No tasks yet. Add one above!</div>
+    <% end %>
+  </div>
+</div>
