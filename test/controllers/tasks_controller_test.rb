@@ -12,9 +12,7 @@ class TasksControllerTest < ActionDispatch::IntegrationTest
 
     get tasks_url
     assert_response :success
-    assert_select "table" do
-      assert_select "tr", count: 3 # header + 2 tasks
-    end
+    assert_select "tbody#tasks-list tr", count: Task.count
   end
 
   test "should create task with valid parameters" do

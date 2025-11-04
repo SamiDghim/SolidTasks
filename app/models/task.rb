@@ -7,4 +7,6 @@ class Task < ApplicationRecord
   scope :by_status, ->(status) { where(status: status) if status.present? }
 
   broadcasts_to ->(task) { "tasks" }, inserts_by: :prepend, partial: "tasks/task"
+
+  after_create_commit { TaskJob.perform_later(id) }
 end

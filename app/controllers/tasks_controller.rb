@@ -10,7 +10,6 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
-      TaskJob.perform_later(@task.id)
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to tasks_path, notice: "Task created and job enqueued!" }

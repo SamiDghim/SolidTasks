@@ -1,3 +1,4 @@
+
 <%= turbo_stream.prepend "tasks-list" do %>
   <%= render partial: "task", locals: { task: @task } %>
 <% end %>
@@ -7,3 +8,5 @@
 <%end%>
 
 <%= turbo_stream.remove "no-tasks-message" %>
+
+<%= turbo_stream.remove "task-error-alert" %>
