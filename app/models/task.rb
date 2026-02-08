@@ -5,8 +5,9 @@ class Task < ApplicationRecord
 
   scope :recent, -> { order(created_at: :desc) }
   scope :by_status, ->(status) { where(status: status) if status.present? }
+  scope :done, -> { where(status: :done) }
+  scope :archivable, -> { done }
 
   broadcasts_to ->(task) { "tasks" }
 
-  after_create_commit { TaskJob.perform_later(id) }
 end
