@@ -3,6 +3,6 @@ class TaskArchiverJob < ApplicationJob
 
   def perform
     Rails.logger.info "Archiving done tasks..."
-    Task.where(status: :done).update_all(status: :archived)
+    Task.archivable.update_all(status: :archived)
   end
 end

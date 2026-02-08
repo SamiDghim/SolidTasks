@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
   def index
-    @tasks = Task.order(created_at: :desc)
+    @tasks = Task.recent
     @task = Task.new
   end
 
@@ -10,9 +10,13 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
 
     if @task.save
+      # Simulate processing time
+      sleep 2
+      @task.update!(status: :done)
+
       respond_to do |format|
         format.turbo_stream
-        format.html { redirect_to tasks_path, notice: "Task created and job enqueued!" }
+        format.html { redirect_to tasks_path, notice: "Task created and processed!" }
       end
     end
   end
